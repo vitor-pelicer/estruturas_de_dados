@@ -10,15 +10,15 @@ struct node{
 
 
 int insert(node **head, node **tail);
-/*int remove_first();
-int remove_back();
-int remove_at();
-int remove_all();
-int search();*/
+int remove_first(node **head, node **tail);
+int remove_last(node **head, node **tail);
+int remove_at(node **head, node **tail, int position);
+/*int remove_all(node **head, node **tail);
+int search(node **head);*/
 
 int main(){
     node *head = NULL, *tail = NULL, *el;
-    int op;
+    int op, position;
     do{
         cout << "Take one option: \n";
         cout << "1) insert a node \n";
@@ -30,9 +30,24 @@ int main(){
         cout << "0) Exit \n";
         cout << "---->";
         
+        cin >> op;
 
-        insert(&head, &tail);
-
+        switch(op){
+            case 1:
+                insert(&head, &tail);
+                break;
+            case 2:
+                remove_first(&head, &tail);
+                break;
+            case 3:
+                remove_last(&head, &tail);
+                break;
+            case 4:
+                cout << "Insert the position to remove\n-----> ";
+                cin >> position;
+                remove_at(&head, &tail, position);
+                break;
+        }
         el = head;
         while(el!=NULL){
             cout << el->n << endl;
@@ -80,6 +95,84 @@ int insert(node **head, node **tail){
             nn->prev = prev;
         }
 
+    }
+    return 0;
+}
+
+int remove_first(node **head, node **tail){
+    if(*head == NULL){
+        cout << "The linked list is empty\n";
+    }
+    else if(*head == *tail){
+        delete *head;
+        *head = NULL;
+        *tail = NULL;
+        cout << "POP\n";
+        cout << "Now the linked list is empty\n";
+    }
+    else{
+        *head = (*head)->next;
+        delete (*head)->prev;
+        (*head)->prev = NULL;
+        cout << "POP\n";
+    }
+    return 0;
+}
+
+int remove_last(node **head, node **tail){
+    if(*head == NULL){
+        cout << "The kinked list is empty\n";
+    }
+    else if(*head == *tail){
+        delete *head;
+        *head = NULL;
+        *tail = NULL;
+        cout << "POP\n";
+        cout << "Now the linked list is empty\n";
+    }
+    else{
+        *tail = (*tail)->prev;
+        delete (*tail)->next;
+        (*tail)->next = NULL;
+        cout << "POP\n";
+    }
+    return 0;
+}
+
+int remove_at(node **head, node **tail, int position){
+    if(position<0){
+        cout << "The position does not exist\n";
+    }
+    else{
+        if(*head == NULL){
+            cout << "The linked list is empty";
+        }
+        else{
+            node *ptr = *head;
+            for(int i=0; ptr != NULL && i < position; i++) ptr = ptr->next;
+            if(ptr == NULL){
+                cout << "The position does not exist\n";
+            }
+            else if(ptr == *head){
+                if(*head == *tail){
+                    *head = NULL;
+                    *tail = NULL;
+                    delete ptr;
+                }else{
+                    *head = (*head)->next;
+                    (*head)->prev = NULL;
+                    delete ptr;
+                }
+            }else if(ptr == *tail){
+                *tail = (*tail)->prev;
+                (*tail)->next = NULL;
+                delete ptr;
+            }else{
+                (ptr->prev)->next = ptr->next;
+                (ptr->next)->prev = ptr->prev;
+                delete ptr;
+            }
+        }
     }
     return 0;
 }
