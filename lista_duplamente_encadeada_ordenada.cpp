@@ -12,15 +12,15 @@ struct node{
 int insert(node **head, node **tail);
 int remove_first(node **head, node **tail);
 int remove_last(node **head, node **tail);
-int remove_at(node **head, node **tail, int position);
-/*int remove_all(node **head, node **tail);
-int search(node **head);*/
+int remove_at(node **head, node **tail, int *position);
+int remove_all(node **head, node **tail);
+int search(node *head, int *wanted);
 
 int main(){
     node *head = NULL, *tail = NULL, *el;
-    int op, position;
+    int op, position, number;
     do{
-        cout << "Take one option: \n";
+        cout << "\nTake one option: \n";
         cout << "1) insert a node \n";
         cout << "2) remove the first node \n";
         cout << "3) remove the last node \n";
@@ -28,7 +28,7 @@ int main(){
         cout << "5) delete all nodes \n";
         cout << "6) search the first occurence of a number in the linked-list \n";
         cout << "0) Exit \n";
-        cout << "---->";
+        cout << "----> ";
         
         cin >> op;
 
@@ -45,16 +45,24 @@ int main(){
             case 4:
                 cout << "Insert the position to remove\n-----> ";
                 cin >> position;
-                remove_at(&head, &tail, position);
+                remove_at(&head, &tail, &position);
                 break;
+            case 5:
+                remove_all(&head, &tail);
+                break;
+            case 6:
+                cout << "Insert the number to be searched\n-----> ";
+                cin >> number;
+                search(head, &number);
         }
         el = head;
+        cout << "\n";
         while(el!=NULL){
             cout << el->n << endl;
             el = el->next;
         }
-
-    }while(true);
+        cout << "\n";
+    }while(op != 0);
     
 
     return 0;
@@ -62,7 +70,7 @@ int main(){
 
 int insert(node **head, node **tail){
     node *nn = new node();
-    cout << "insert the new number";
+    cout << "insert the new number\n-----> ";
     cin >> nn->n;
     node *ptr, *prev;
     
@@ -121,7 +129,7 @@ int remove_first(node **head, node **tail){
 
 int remove_last(node **head, node **tail){
     if(*head == NULL){
-        cout << "The kinked list is empty\n";
+        cout << "The linked list is empty\n";
     }
     else if(*head == *tail){
         delete *head;
@@ -139,17 +147,17 @@ int remove_last(node **head, node **tail){
     return 0;
 }
 
-int remove_at(node **head, node **tail, int position){
+int remove_at(node **head, node **tail, int *position){
     if(position<0){
         cout << "The position does not exist\n";
     }
     else{
         if(*head == NULL){
-            cout << "The linked list is empty";
+            cout << "The linked list is empty\n";
         }
         else{
             node *ptr = *head;
-            for(int i=0; ptr != NULL && i < position; i++) ptr = ptr->next;
+            for(int i=0; ptr != NULL && i < *position; i++) ptr = ptr->next;
             if(ptr == NULL){
                 cout << "The position does not exist\n";
             }
@@ -175,4 +183,39 @@ int remove_at(node **head, node **tail, int position){
         }
     }
     return 0;
+}
+
+int remove_all(node **head, node **tail){
+    node *ptr = *head, *aux;
+    while(ptr!=NULL){
+        aux = ptr;
+        ptr = ptr->next;
+        delete aux;
+    }
+    *head = NULL;
+    *tail = NULL;
+    return 0;
+}
+
+int search(node *head, int *wanted){
+    int count = 0;
+    if(head == NULL){
+        cout << "The linked list is empty\n";
+        return -1;
+    }
+    else{
+        node *ptr = head;
+        while(ptr != NULL && ptr->n != *wanted){
+            ptr = ptr->next;
+            count++;
+        }
+        if(ptr != NULL){
+            cout << "\nThe position found is " << count << endl;
+            return count;
+        }
+        else{
+            cout << "Number not found\n";
+            return -1;
+        }
+    }
 }
