@@ -45,6 +45,7 @@ int main(){
                 cout<<"Digite o número a ser inserido:\n";
                 cout<<"---> ";
                 cin>>num;
+                printf("\n\tNumero %d inserido na posicao %d\n", num, fhash(num));
                 inserirHash(num, &(hash[fhash(num)]));
                 break;
             }
