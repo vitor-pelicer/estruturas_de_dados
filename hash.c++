@@ -15,7 +15,7 @@ int fhash(int n){
     return pos;
 }
 
-
+//tabela hash
 int inserirHash(int add, hashNode **hash);
 int buscaHash(int busca, hashNode **hash);
 int removeHash(int busca, hashNode **hash);
